@@ -96,7 +96,8 @@ INPUT.tz {width:15em;}
 .chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
 .map {background:yellow;width:100%;height:100%}
 
-#map {width:560px;height:320px;  border:1px solid #888;border-radius:6px;padding:8px;}
+#map {width:640px;height:480px;  border:1px solid #888;border-radius:6px;padding:8px;}
+
 </style>
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
 
@@ -106,19 +107,23 @@ INPUT.tz {width:15em;}
 <script src="daylightchart.js"></script>
 <script>
 
+var map;
+
+var lat0 = <%=lat0 %>;
+var lon0 = <%=lon0 %>;
+var lat1 = <%=lat1 %>;
+var lon1 = <%=lon1 %>;
+
 function initializeMap () {
-	
-	var mapCenter = new google.maps.LatLng(0,0);
-	
+
 	var mapOptions = {
-	          center: mapCenter,
+	          center: new google.maps.LatLng(0,0),
 	          zoom: 1
 	        };
 	
 	map = new google.maps.Map(
-			document.getElementById("map"),
+			document.getElementById("mapPopup"),
             mapOptions);
-	
 	
 	// Map click event handler
 	google.maps.event.addListener(map, 'click', function(e) {
@@ -129,7 +134,15 @@ function initializeMap () {
 		    position: e.latLng,
 		    map: map
 		});
-
+	});
+	
+	var marker = new google.maps.Marker({
+	    position: new google.maps.LatLng(lat0,lon0),
+	    map: map
+	});
+	var marker = new google.maps.Marker({
+	    position: new google.maps.LatLng(lat1,lon1),
+	    map: map
 	});
 }
 
@@ -144,17 +157,18 @@ function drawChart(chartId, latitude, longitude) {
 }
 
 $(function(){
-	var lat0 = <%=lat0 %>;
-	var lon0 = <%=lon0 %>;
-	var lat1 = <%=lat1 %>;
-	var lon1 = <%=lon1 %>;
+
 	
+	$("#mapPopup").dialog({
+		width:640,height:480,
+		autoOpen:false,
+		resizeStop: function(event, ui) {google.maps.event.trigger(map, 'resize')  },
+        open: function(event, ui) {google.maps.event.trigger(map, 'resize'); }      
+	});
 	
-	$(function() {
-	    $( "#accordion" ).accordion({
-	      collapsible: true
-	    });
-	  });
+	$("#mapBtn").click(function(){
+		$("#mapPopup").dialog("open");
+	});
 	
 	
 	$.ajax( {
@@ -214,10 +228,9 @@ in the evenings</text>
 </header>
 -->
 
-<div id="accordion">
-<h3>Map</h3>
-<div id="map"></div>
-</div>
+
+<button id="mapBtn" type="button">Display Map</button>
+<div id="mapPopup" title="World Map"></div>
 
 <table>
 <!-- 
