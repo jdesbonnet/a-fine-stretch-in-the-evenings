@@ -135,18 +135,29 @@ function initializeMap () {
 		});
 	});
 	
-	var marker = new google.maps.Marker({
+	var marker0 = new google.maps.Marker({
 	    position: new google.maps.LatLng(lat0,lon0),
+	    draggable:true,
 	    map: map
 	});
-	var marker = new google.maps.Marker({
+	google.maps.event.addListener(marker0, 'dragend', function() {
+		drawChart("chart0",this.getPosition().lat(),this.getPosition().lng());
+	});
+
+	var marker1 = new google.maps.Marker({
 	    position: new google.maps.LatLng(lat1,lon1),
+	    draggable:true,
 	    map: map
 	});
+	google.maps.event.addListener(marker1, 'dragend', function() {
+		drawChart("chart1",this.getPosition().lat(),this.getPosition().lng());
+	});
+	
 }
 
 
 function drawChart(chartId, latitude, longitude) {
+	alert ("chart=" + chartId + " lat=" + latitude + " lon=" + longitude);
 	$.ajax( {
 		url: "get-daylight-data.async.jsp",
 		data: "lat=" + latitude + "&lon=" + longitude
