@@ -1,25 +1,17 @@
-<%@page import="java.text.DecimalFormat"%>
-<%@page import="java.io.PrintStream"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="com.google.appengine.repackaged.com.google.api.client.json.Json"%>
-<%@page import="com.google.appengine.repackaged.org.codehaus.jackson.JsonParser"%>
-<%@page import="java.net.MalformedURLException"%>
-<%@page import="java.io.IOException"%>
-<%@page import="java.io.InputStreamReader"%>
-<%@page import="java.io.BufferedReader"%>
-<%@page import="java.net.URL"%>
-<%@page pageEncoding="UTF-8"%><%@include file="_key.jsp"%><%@page 
+<%@page pageEncoding="UTF-8"%><%@include file="_key.jsp"%><%@page
+import="java.io.BufferedReader"
+import="java.io.InputStreamReader"
+import="java.io.IOException"
+import="java.net.URL" 
+import="java.net.MalformedURLException"
 import="java.util.Calendar"
-import="ie.wombat.astro.Sun"
 import="java.util.Date"
+import="java.util.TimeZone"
+import="java.text.DecimalFormat"
 import="java.text.SimpleDateFormat"
-import="java.util.TimeZone"%><%!
-
-
-private static Map<String,String>tzCache = new HashMap<String,String>();
-private static int tzCacheLookup = 0;
-private static int tzCacheHit = 0;
+import="ie.wombat.finestretch.TimezoneDB"
+import="ie.wombat.astro.Sun"
+%><%!
 
 double[] correctSunRiseSet(double riseSet[]) {
 	double[] ret = new double[2];
@@ -31,49 +23,10 @@ double[] correctSunRiseSet(double riseSet[]) {
 			? 24 : riseSet[Sun.SET];
 	return ret;
 }
-String fetchTimezone (double latitude, double longitude) {
-	
-	tzCacheLookup++;
-	
-	String key = "latitude" + "," + longitude;
-	if (tzCache.containsKey(key)) {
-		System.err.println ("tzCacheHit on " + key);
-		tzCacheHit++;
-		return tzCache.get(key);
-	}
-	
-	 StringBuffer buf = new StringBuffer();
-	 try {
-		URL url = new URL("http://api.timezonedb.com/?lat=" + latitude 
-				+ "&lng=" + longitude + "&format=xml&key=QN7MRGRNLXNZ");
-	 	BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-	    String line;
-
-	    while ((line = reader.readLine()) != null) {
-	        buf.append(line);
-	    }
-	    reader.close();
-	    
-	    int start = buf.indexOf("<zoneName>",0) + "<zoneName>".length();
-	    int end = buf.indexOf("</zoneName>",0);
-	 
-	    String zoneId = buf.substring(start,end);
-	    
-	    tzCache.put(key, zoneId);
-	    
-	    return zoneId;
-	    
-	} catch (MalformedURLException e) {
-    // ...
-	} catch (IOException e) {
-    // ...
-	}
-	 
-	 return "UTC";
-}
-
-	
 %><%
+
+//Key is in _key.jsp so as to avoid checking a working key into GitHub.
+TimezoneDB.getInstance().setKey(timezoneDbKey);
 
 response.setContentType("application/json");
 
@@ -101,9 +54,8 @@ TimeZone tz;
 if (request.getParameter("tz")!=null) {
 	tz = TimeZone.getTimeZone(request.getParameter("tz"));	
 } else {
-	//tz = TimeZone.getDefault();
-	String tzId = fetchTimezone(lat, lon);
-	System.err.println (tzId);
+	String tzId = TimezoneDB.getInstance().getTimezoneId(lat,lon);
+	System.err.println ("Timezone at " + lat + "," + lon + ": " + tzId);
 	tz = TimeZone.getTimeZone(tzId);
 }
 

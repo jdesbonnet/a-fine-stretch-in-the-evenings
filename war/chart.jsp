@@ -153,8 +153,10 @@ TABLE.dayNight TD.ne {background: #008; width:5px;}
 TABLE.dayNight TD.de {background: #fe0; width:5px;}
 INPUT.lat, INPUT.lon {width:4em;}
 INPUT.tz {width:15em;}
-.chart {width:660px; }
+.chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
 .map {background:yellow;width:100%;height:100%}
+
+#map {width:560px;height:320px;  border:1px solid #888;border-radius:6px;padding:8px;}
 </style>
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
 
@@ -163,6 +165,34 @@ INPUT.tz {width:15em;}
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="daylightchart.js"></script>
 <script>
+
+function initializeMap () {
+	
+	var mapCenter = new google.maps.LatLng(0,0);
+	
+	var mapOptions = {
+	          center: mapCenter,
+	          zoom: 1
+	        };
+	
+	map = new google.maps.Map(
+			document.getElementById("map"),
+            mapOptions);
+	
+	
+	// Map click event handler
+	google.maps.event.addListener(map, 'click', function(e) {
+		if (marker != null) {
+			marker.setMap(null);
+		}
+		marker = new google.maps.Marker({
+		    position: e.latLng,
+		    map: map
+		});
+
+	});
+}
+
 
 function drawChart(chartId, latitude, longitude) {
 	$.ajax( {
@@ -178,6 +208,14 @@ $(function(){
 	var lon0 = <%=lon0 %>;
 	var lat1 = <%=lat1 %>;
 	var lon1 = <%=lon1 %>;
+	
+	
+	$(function() {
+	    $( "#accordion" ).accordion({
+	      collapsible: true
+	    });
+	  });
+	
 	
 	$.ajax( {
 		url: "get-daylight-data.async.jsp",
@@ -216,6 +254,7 @@ $(function(){
 	});
 	}
 	
+	initializeMap();
 	
 });
 </script>
@@ -235,7 +274,15 @@ in the evenings</text>
 </header>
 -->
 
+<div id="accordion">
+<h3>Map</h3>
+<div id="map"></div>
+</div>
+
 <table>
+<!-- 
+<tr><td></td><td  colspan="1"><div id="map2"></div></td></tr>
+-->
 <tr>
 <td><div class="chart" id="chart0"></div></td>
 <td><div class="chart" id="chart1"></div></td>
