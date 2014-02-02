@@ -5,6 +5,7 @@
 
 	var options;
 	var svgEl;
+	var svgDivEl;
 	var wrapperEl;
 	var map;
 	var marker;
@@ -37,8 +38,8 @@
 		var formEl = document.createElement("form");
 		$(wrapperEl).append(formEl);
 		$(formEl).html('<table><tr>\
-				<td>Latitude:</td><td><input type="text" class="lat" id="lat_'+id+'" value="888"/></td>\
-				<td>Longitude:</td><td><input type="text" class="lon" id="lon_'+id+'" value="777"/></td>\
+				<td>Latitude:</td><td><input type="text" class="lat" id="lat_'+id+'" value=""/></td>\
+				<td>Longitude:</td><td><input type="text" class="lon" id="lon_'+id+'" value=""/></td>\
 				<td><button type="button" class="mapBtn" id="mapbtn_'+id+'">Map</button></td>\
 				<td>Timezone:</td><td><span class="tz" id="tz_'+id+'"></span></td>\
 				</tr></table>\
@@ -49,12 +50,17 @@
 		
 
 
+		// Outer DIV element needed for refresh issue
+		svgDivEl = document.createElement("div");
+		$(wrapperEl).append(svgDivEl);
+		
 		svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		svgEl.setAttribute("width","640");
 		svgEl.setAttribute("height","760");
 		
-		$(wrapperEl).append(svgEl);
-		
+		//$(wrapperEl).append(svgEl);
+		$(svgDivEl).append(svgEl);
+
 		
 
 		// Using Google Maps in jQuery UI Dialog:
@@ -127,6 +133,8 @@
 			dayRectEl.setAttribute("width", (rec[2] - rec[1])*options.pixelsPerHour);
 			dayRectEl.setAttribute("height", options.pixelsPerDay);
 			dayRectEl.setAttribute("fill", "url(#day)");
+			//dayRectEl.setAttribute("fill", "yellow");
+
 			$(svgEl).append(dayRectEl);
 		}
 		
@@ -217,8 +225,10 @@
 	
 		// refresh 
 		// http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
-		//$(wrapperEl).html($(wrapperEl).html()); 
-		$(svgEl).html($(svgEl).html()); 
+		//$(wrapperEl).html($(wrapperEl).html());
+		//$(svgEl).html($(svgEl).html());  // This seems not to work.
+		$(svgDivEl).html($(svgDivEl).html()); // Needs to be an outer DIV
+
 		
 		if (options.onChange) {
 			$(wrapperEl).find("input").change(function() {
