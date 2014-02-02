@@ -95,8 +95,7 @@ INPUT.lat, INPUT.lon {width:4em;}
 INPUT.tz {width:15em;}
 .chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
 .map {background:yellow;width:100%;height:100%}
-
-#map {width:640px;height:480px;  border:1px solid #888;border-radius:6px;padding:8px;}
+#map {width:100%;height:100%;}
 
 </style>
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
@@ -122,7 +121,7 @@ function initializeMap () {
 	        };
 	
 	map = new google.maps.Map(
-			document.getElementById("mapPopup"),
+			document.getElementById("map"),
             mapOptions);
 	
 	// Map click event handler
@@ -157,13 +156,18 @@ function drawChart(chartId, latitude, longitude) {
 }
 
 $(function(){
-
 	
 	$("#mapPopup").dialog({
 		width:640,height:480,
 		autoOpen:false,
-		resizeStop: function(event, ui) {google.maps.event.trigger(map, 'resize')  },
-        open: function(event, ui) {google.maps.event.trigger(map, 'resize'); }      
+		resizeStop: function(event, ui) {
+			google.maps.event.trigger(map, 'resize');
+			map.setCenter(new google.maps.LatLng(0,0));
+		},
+        open: function(event, ui) {
+        	google.maps.event.trigger(map, 'resize'); 
+			map.setCenter(new google.maps.LatLng(0,0));
+        }      
 	});
 	
 	$("#mapBtn").click(function(){
@@ -230,7 +234,7 @@ in the evenings</text>
 
 
 <button id="mapBtn" type="button">Display Map</button>
-<div id="mapPopup" title="World Map"></div>
+<div id="mapPopup" title="World Map"><div id="map"></div></div>
 
 <table>
 <!-- 
