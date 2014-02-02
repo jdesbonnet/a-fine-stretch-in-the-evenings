@@ -1,30 +1,16 @@
-<%@page import="java.text.DecimalFormat"%>
-<%@page import="java.io.PrintStream"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="com.google.appengine.repackaged.com.google.api.client.json.Json"%>
-<%@page import="com.google.appengine.repackaged.org.codehaus.jackson.JsonParser"%>
-<%@page import="java.net.MalformedURLException"%>
-<%@page import="java.io.IOException"%>
-<%@page import="java.io.InputStreamReader"%>
-<%@page import="java.io.BufferedReader"%>
-<%@page import="java.net.URL"%>
 <%@page pageEncoding="UTF-8"%><%@page 
 import="java.util.Calendar"
-import="ie.wombat.astro.Sun"
 import="java.util.Date"
 import="java.text.SimpleDateFormat"
-import="java.util.TimeZone"%><%@include file="_key.jsp"%><%!
-
+import="java.util.TimeZone"
+import="ie.wombat.astro.Sun"
+import="ie.wombat.finestretch.TimezoneDB"
+%><%@include file="_key.jsp"%><%!
 
 public static final int blocksPerHour = 4;
 public static final float pixelsPerHour = 24;
 public static final float pixelsPerDay = 2;
 public static final float topMargin = 16;
-
-private static Map<String,String>tzCache = new HashMap<String,String>();
-private static int tzCacheLookup = 0;
-private static int tzCacheHit = 0;
 
 double[] correctSunRiseSet(double riseSet[]) {
 	double[] ret = new double[2];
@@ -36,54 +22,10 @@ double[] correctSunRiseSet(double riseSet[]) {
 			? 24 : riseSet[Sun.SET];
 	return ret;
 }
-String fetchTimezone (double latitude, double longitude) {
-	
-	tzCacheLookup++;
-	
-	String key = "latitude" + "," + longitude;
-	if (tzCache.containsKey(key)) {
-		System.err.println ("tzCacheHit on " + key);
-		tzCacheHit++;
-		return tzCache.get(key);
-	}
-	
-	 StringBuffer buf = new StringBuffer();
-	 try {
-		URL url = new URL("http://api.timezonedb.com/?lat=" + latitude 
-				+ "&lng=" + longitude + "&format=xml"
-				+ "&key=" + timezoneDbKey);
-	 	BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-	    String line;
-
-	    while ((line = reader.readLine()) != null) {
-	        buf.append(line);
-	    }
-	    reader.close();
-	    
-	    int start = buf.indexOf("<zoneName>",0) + "<zoneName>".length();
-	    int end = buf.indexOf("</zoneName>",0);
-	 
-	    String zoneId = buf.substring(start,end);
-	    
-	    tzCache.put(key, zoneId);
-	    
-	    return zoneId;
-	    
-	} catch (MalformedURLException e) {
-    // ...
-	} catch (IOException e) {
-    // ...
-	}
-	 
-	 return "UTC";
-}
-
 	
 %><%
 
 SimpleDateFormat df = new SimpleDateFormat ("dd MMM");
-
-
 
 double lat0 = 53.3;
 double lon0 = -9;
@@ -108,8 +50,7 @@ TimeZone tz0;
 if (request.getParameter("tz0")!=null) {
 	tz0 = TimeZone.getTimeZone(request.getParameter("tz0"));	
 } else {
-	//tz = TimeZone.getDefault();
-	String tzId = fetchTimezone(lat0, lon0);
+	String tzId = TimezoneDB.getInstance().getTimezoneId(lat0, lon0);
 	System.err.println (tzId);
 	tz0 = TimeZone.getTimeZone(tzId);
 }
@@ -132,8 +73,7 @@ TimeZone tz1;
 if (request.getParameter("tz1")!=null) {
 	tz1 = TimeZone.getTimeZone(request.getParameter("tz1"));	
 } else {
-	//tz = TimeZone.getDefault();
-	String tzId = fetchTimezone(lat1, lon1);
+	String tzId = TimezoneDB.getInstance().getTimezoneId(lat0, lon0);
 	System.err.println (tzId);
 	tz1 = TimeZone.getTimeZone(tzId);
 }
@@ -294,8 +234,6 @@ A Fine Stretch In the Evenings, version 0.1, 29 Jan 2014.
 Got any queries? Email Joe at jdesbonnet@gmail.com 
 </p>
 </footer>
-
-<!-- tzCache=<%=tzCache.size()%>, hit=<%=tzCacheHit%>/<%=tzCacheLookup%> (<%=tzCacheHit*100/tzCacheLookup%>%) -->
 </body>
 
 </html>
