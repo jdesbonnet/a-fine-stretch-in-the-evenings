@@ -28,6 +28,7 @@
     		var formEl = document.createElement("form");
     		$(wrapperEl).append(formEl);
     		$(formEl).html('<table><tr>\
+    				<td><div class="ldanim"><img id="ldanim_' + id + '" src="ajax-loader.gif" width="16"/></div></td>\
     				<td>Latitude:</td><td><input type="text" class="lat" id="lat_'+id+'" value=""/></td>\
     				<td>Longitude:</td><td><input type="text" class="lon" id="lon_'+id+'" value=""/></td>\
     				<td>Timezone:</td><td><span class="tz" id="tz_'+id+'"></span></td>\
@@ -51,6 +52,15 @@
 
         plugin.getId = function () {
         	return plugin.settings.wrapperEl.id;
+        }
+        
+        plugin.showLoadAnimation = function (b) {
+        	var anim = $("#ldanim_"+plugin.settings.wrapperEl.id);
+        	if (b) {
+        		anim.css("visibility","visible");
+        	} else {
+        		anim.css("visibility","hidden");
+        	}
         }
         
     	var drawChart = function() {

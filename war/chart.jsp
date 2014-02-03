@@ -96,6 +96,8 @@ INPUT.tz {width:15em;}
 .chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
 .map {background:yellow;width:100%;height:100%}
 #map {width:100%;height:100%;}
+.ldanim {width:18px; height:18px; }
+.ldanim IMG {visibility:hidden;}
 
 </style>
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
@@ -103,7 +105,7 @@ INPUT.tz {width:15em;}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="daylightchart2.js"></script>
+<script src="daylightchart.js"></script>
 <script>
 
 var map;
@@ -146,12 +148,14 @@ function initializeMap () {
 
 
 function drawChart(chartId, latitude, longitude) {
+	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
 	$.ajax( {
 		url: "get-daylight-data.async.jsp",
 		data: "lat=" + latitude + "&lon=" + longitude
 	}).done(function(data) {
 		console.log(data);
 		$("#"+chartId).data("daylightchart").update(data);
+		$("#"+chartId).data("daylightchart").showLoadAnimation(false);
 	});
 }
 
