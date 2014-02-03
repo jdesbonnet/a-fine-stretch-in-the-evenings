@@ -76,12 +76,6 @@ if (request.getParameter("tz1")!=null) {
 <title>Day/Night for latitude <%=lat0 %>, longitude <%=lon0 %></title>
 
 <style type="text/css">
-TABLE.dayNight {border:0px; padding: 0px;}
-TABLE.dayNight TD {border: 0px; padding: 0px;}
-TABLE.dayNight TD.n {background: #00a; width:5px;} 
-TABLE.dayNight TD.d {background: #ff0; width:5px;}
-TABLE.dayNight TD.ne {background: #008; width:5px;} 
-TABLE.dayNight TD.de {background: #fe0; width:5px;}
 INPUT.lat, INPUT.lon {width:6em;}
 INPUT.tz {width:15em;}
 .chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
@@ -89,8 +83,8 @@ INPUT.tz {width:15em;}
 #map {width:100%;height:100%;}
 .ldanim {width:18px; height:18px; }
 .ldanim IMG {visibility:hidden;}
-
 </style>
+
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
