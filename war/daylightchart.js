@@ -1,5 +1,6 @@
 /**
  * Draw daylight chart in SVG
+ * http://learn.jquery.com/plugins/stateful-plugins-with-widget-factory/
  */
 (function( $ ) {
 
@@ -7,21 +8,30 @@
 	var svgEl;
 	var svgDivEl;
 	var wrapperEl;
-	//var map;
-	var marker;
 	
 	var methods = {
 			 init : function( opts ) {
+
+				 
 				 options = opts;
 				 wrapperEl = this.get(0);
+				 
+				 this.data("wrapperId", wrapperEl.id);
+				 this.data("options", opts));
+				 
 				 init();
+				 
 			 },
 			 update: function (newData) {
 				 update(newData);
+			 },
+			 getId: function () {
+				 return wrapperEl.id;
 			 }
 	};
 	 
 	$.fn.daylightchart = function(method) {
+		
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -53,8 +63,14 @@
 	}
 		
 	function update (newData) {
+		alert ("this="  + this.id);
+		
 		options.data = newData;
+		console.log("emptying, wrapperId=" + wrapperEl.id);
+		console.log(svgDivEl);
+		alert ('updating ' + wrapperEl.id);
 		$(svgDivEl).empty();
+		alert ('empty');
 		drawChart();
 	}
 	
@@ -62,6 +78,7 @@
 		
 		// Create SVG element
 		svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svgEl.setAttribute("id","svg_" + wrapperEl.id);
 		svgEl.setAttribute("width","640");
 		svgEl.setAttribute("height","760");
 		
@@ -207,9 +224,10 @@
 		// refresh 
 		// http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
 		//$(wrapperEl).html($(wrapperEl).html());
+		
 		//$(svgEl).html($(svgEl).html());  // This seems not to work.
-		$(svgDivEl).html($(svgDivEl).html()); // Needs to be an outer DIV
-		//$("#svgDiv"+wrapperEl.id).html($("#svgDiv_"+wrapperEl.id).html()); // Needs to be an outer DIV
+		//$(svgDivEl).html($(svgDivEl).html()); // Needs to be an outer DIV
+		$("#svgDiv_"+wrapperEl.id).html($("#svgDiv_"+wrapperEl.id).html()); // Needs to be an outer DIV
 
 		
 		if (options.onChange) {

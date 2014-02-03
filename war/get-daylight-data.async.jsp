@@ -56,6 +56,9 @@ if (request.getParameter("tz")!=null) {
 } else {
 	String tzId = TimezoneDB.getInstance().getTimezoneId(lat,lon);
 	System.err.println ("Timezone at " + lat + "," + lon + ": " + tzId);
+	if (tzId == null) {
+		tzId = "UTC";
+	}
 	tz = TimeZone.getTimeZone(tzId);
 }
 

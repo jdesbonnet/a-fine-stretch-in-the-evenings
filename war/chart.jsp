@@ -153,6 +153,8 @@ function drawChart(chartId, latitude, longitude) {
 		data: "lat=" + latitude + "&lon=" + longitude
 	}).done(function(data) {
 		console.log(data);
+		alert ("about to update chart with chartId=" + chartId + " found " + $("#"+chartId).size());
+		alert ("#"+chartId + " id=" + $("#"+chartId).daylightchart("getId"));
 		$("#"+chartId).daylightchart("update", data);
 	});
 }
@@ -193,6 +195,7 @@ $(function(){
 				drawChart("chart0",lat,lon);
 			}
 		});
+		alert ("Chart0 ID: " + $("#chart0").daylightchart("getId"));
 	});
 	
 	if (lat1 != -999) {
@@ -211,10 +214,13 @@ $(function(){
 				window.location.href= "?lat0=" + lat0 + "&lon0=" + lon0 +"&lat1=" + lat + "&lon1=" + lon;
 			}
 		});
+		alert ("Chart1 ID: " + $("#chart1").daylightchart("getId"));
 	});
 	}
 	
 	initializeMap();
+	
+	
 	
 });
 </script>
