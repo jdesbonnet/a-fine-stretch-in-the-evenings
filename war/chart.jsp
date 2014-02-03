@@ -231,7 +231,7 @@ $(function(){
 
 <footer>
 <p>
-A Fine Stretch In the Evenings, version 0.1, 29 Jan 2014.
+A Fine Stretch In the Evenings, version 0.1, 29 Jan 2014. <a href="release_notes.html">Release notes</a>.
 Got any queries? Email Joe at jdesbonnet@gmail.com 
 </p>
 </footer>

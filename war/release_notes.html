@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>A Fine Stretch in the Evenings, Release Notes</title>
+</head>
+<body>
+
+<h1>Release Notes</h1>
+<h2>Version 0.1, 29 Jan 2014</h2>
+<p>First release. I wrote a blog post about this at
+<a href="http://jdesbonnet.blogspot.ie/2014/02/a-fine-stretch-in-evenings.html">http://jdesbonnet.blogspot.ie/2014/02/a-fine-stretch-in-evenings.html</a>.
+ 
+The source code is available at GitHub: <a href="https://github.com/jdesbonnet/a-fine-stretch-in-the-evenings">https://github.com/jdesbonnet/a-fine-stretch-in-the-evenings</a>
+</p>
+
+<p>
+Known problems:
+</p>
+
+<ul>
+
+<li> uses timezonedb.com web API to deduce local timezone form latitude,longitude. This may take a few seconds 
+and may on fail on occasion. I'm looking for a good alternative that doesn't involve an external web API.
+</li>
+
+<li> If the local timezone cannot be deduced, will default to UTC which will cause chart rendering problems for
+zones far from the 0 meridian.
+</li>
+
+<li> Because of the two items above, rendering charts near the poles is problematic.</li>
+
+</ul>
+
+ 
+</body>
+</html>
