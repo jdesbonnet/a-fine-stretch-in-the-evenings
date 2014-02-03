@@ -15,11 +15,11 @@ import="ie.wombat.astro.Sun"
 
 double[] correctSunRiseSet(double riseSet[]) {
 	double[] ret = new double[2];
-	ret[Sun.RISE] = riseSet[Sun.RISE] == Sun.ABOVE_HORIZON  ? 0 : riseSet[Sun.RISE];
+	ret[Sun.RISE] = riseSet[Sun.RISE] == Sun.ABOVE_HORIZON 
+			| riseSet[Sun.RISE]==Sun.BELOW_HORIZON 
+			? 0 : riseSet[Sun.RISE];
 	ret[Sun.SET] = riseSet[Sun.SET] == Sun.ABOVE_HORIZON 
 			| riseSet[Sun.SET]==Sun.BELOW_HORIZON 
-			//| riseSet[Sun.SET]>24 
-			//| riseSet[Sun.SET] < riseSet[Sun.RISE] 
 			? 24 : riseSet[Sun.SET];
 	return ret;
 }

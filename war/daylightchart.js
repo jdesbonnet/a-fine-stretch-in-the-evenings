@@ -108,6 +108,13 @@
     		
     		for (var i = 0; i < options.data.riseSet.length; i++) {
     			var rec = options.data.riseSet[i];
+    			
+    			if (rec[2]<rec[1]) {
+    				rec[2]=24;
+    			}
+    			if (rec[3]<rec[0]) {
+    				rec[3]=24;
+    			}
     			// Twilight
     			var twilightRectEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     			twilightRectEl.setAttribute("x",options.leftMargin + rec[0]*options.pixelsPerHour);
@@ -117,6 +124,8 @@
     			twilightRectEl.setAttribute("fill", "url(#twilight)");
     			$(svgEl).append(twilightRectEl);
 
+
+    			
     			var dayRectEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     			dayRectEl.setAttribute("x",options.leftMargin + rec[1]*options.pixelsPerHour);
     			dayRectEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay);
