@@ -7,7 +7,7 @@
 	var svgEl;
 	var svgDivEl;
 	var wrapperEl;
-	var map;
+	//var map;
 	var marker;
 	
 	var methods = {
@@ -40,56 +40,37 @@
 		$(formEl).html('<table><tr>\
 				<td>Latitude:</td><td><input type="text" class="lat" id="lat_'+id+'" value=""/></td>\
 				<td>Longitude:</td><td><input type="text" class="lon" id="lon_'+id+'" value=""/></td>\
-				<td><button type="button" class="mapBtn" id="mapbtn_'+id+'">Map</button></td>\
 				<td>Timezone:</td><td><span class="tz" id="tz_'+id+'"></span></td>\
 				</tr></table>\
 				');
 		
-		$(wrapperEl).append('<div class="mapDialog" id="mapdialog_' + id 
-				+ '" title="Map selector"><div class="map" id="map_'+id+'"></div>');
-		
-
-
 		// Outer DIV element needed for refresh issue
 		svgDivEl = document.createElement("div");
+		svgDivEl.id = "svgDiv_" + wrapperEl.id;
 		$(wrapperEl).append(svgDivEl);
-		
-		svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		svgEl.setAttribute("width","640");
-		svgEl.setAttribute("height","760");
-		
-		//$(wrapperEl).append(svgEl);
-		$(svgDivEl).append(svgEl);
-
-		
-
-		// Using Google Maps in jQuery UI Dialog:
-		// http://iwritecrappycode.wordpress.com/2011/07/18/google-maps-in-jquery-ui-dialog/
-		//$(wrapperEl).find(".mapDialog").dialog({
-		$("#mapdialog_"+wrapperEl.id).dialog({
-			width:640,height:480,
-			autoOpen:false,
-			resizeStop: function(event, ui) {google.maps.event.trigger(map, 'resize')  },
-            open: function(event, ui) {google.maps.event.trigger(map, 'resize'); }      
-		});
-		
-		initializeMap();
-		
-		//$(wrapperEl).find(".mapBtn").click(function() {
-		$("#mapbtn_"+wrapperEl.id).click(function() {
-			$("#mapdialog_"+wrapperEl.id).dialog("open");
-		});
 		
 		drawChart();
 	}
 		
 	function update (newData) {
 		options.data = newData;
-		$(svgEl).empty();
+		$(svgDivEl).empty();
 		drawChart();
 	}
 	
-	function drawChart() {		
+	function drawChart() {
+		
+		// Create SVG element
+		svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svgEl.setAttribute("width","640");
+		svgEl.setAttribute("height","760");
+		
+		//$(wrapperEl).append(svgEl);
+		//alert ("svgDivId=" + "svgDiv_"+wrapperEl.id);
+		$(svgDivEl).append(svgEl);
+		//$("#svgDiv_" + wrapperEl.id).append(svgEl);
+
+		
 		defsEl = document.createElementNS("http://www.w3.org/2000/svg", "defs");
 		$(defsEl).append('\
 				 <linearGradient id="twilight" x1="0%" y1="0%" x2="100%" y2="0%"> \
@@ -228,6 +209,7 @@
 		//$(wrapperEl).html($(wrapperEl).html());
 		//$(svgEl).html($(svgEl).html());  // This seems not to work.
 		$(svgDivEl).html($(svgDivEl).html()); // Needs to be an outer DIV
+		//$("#svgDiv"+wrapperEl.id).html($("#svgDiv_"+wrapperEl.id).html()); // Needs to be an outer DIV
 
 		
 		if (options.onChange) {
@@ -250,45 +232,5 @@
 		return (h|0) + "h"  + (((h*60)%60)|0) + "m";
 	}
 
-	function initializeMap () {
-				
-		var mapCenter = new google.maps.LatLng(
-				//$("#lat_"+id).val(), 
-				//$("#lon_"+id).val()
-				options.data.latitude,
-				options.data.longitude
-			);
-		
-		var mapOptions = {
-		          center: mapCenter,
-		          zoom: 6
-		        };
-		
-		map = new google.maps.Map(
-				document.getElementById("map_" + wrapperEl.id),
-	            mapOptions);
-		
-		marker = new google.maps.Marker({
-		    position: mapCenter,
-		    map: map
-		});
-		
-		// Map click event handler
-		google.maps.event.addListener(map, 'click', function(e) {
-			if (marker != null) {
-				marker.setMap(null);
-			}
-			marker = new google.maps.Marker({
-			    position: e.latLng,
-			    map: map
-			});
-			$("#lat_"+wrapperEl.id).val(e.latLng.lat());
-			$("#lon_"+wrapperEl.id).val(e.latLng.lng());
-			
-			if (options.onChange) {
-				options.onChange(e.latLng.lat(), e.latLng.lng());
-			}
-		});
-	}
 	
 })( jQuery );

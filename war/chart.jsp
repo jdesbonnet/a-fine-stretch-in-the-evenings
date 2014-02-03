@@ -124,23 +124,13 @@ function initializeMap () {
 			document.getElementById("map"),
             mapOptions);
 	
-	// Map click event handler
-	google.maps.event.addListener(map, 'click', function(e) {
-		if (marker != null) {
-			marker.setMap(null);
-		}
-		marker = new google.maps.Marker({
-		    position: e.latLng,
-		    map: map
-		});
-	});
-	
 	var marker0 = new google.maps.Marker({
 	    position: new google.maps.LatLng(lat0,lon0),
 	    draggable:true,
 	    map: map
 	});
 	google.maps.event.addListener(marker0, 'dragend', function() {
+		alert('chart0');
 		drawChart("chart0",this.getPosition().lat(),this.getPosition().lng());
 	});
 
@@ -150,6 +140,7 @@ function initializeMap () {
 	    map: map
 	});
 	google.maps.event.addListener(marker1, 'dragend', function() {
+		alert('chart1');
 		drawChart("chart1",this.getPosition().lat(),this.getPosition().lng());
 	});
 	
@@ -157,11 +148,11 @@ function initializeMap () {
 
 
 function drawChart(chartId, latitude, longitude) {
-	alert ("chart=" + chartId + " lat=" + latitude + " lon=" + longitude);
 	$.ajax( {
 		url: "get-daylight-data.async.jsp",
 		data: "lat=" + latitude + "&lon=" + longitude
 	}).done(function(data) {
+		console.log(data);
 		$("#"+chartId).daylightchart("update", data);
 	});
 }
