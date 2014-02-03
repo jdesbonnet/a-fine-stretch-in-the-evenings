@@ -103,7 +103,7 @@ INPUT.tz {width:15em;}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="daylightchart.js"></script>
+<script src="daylightchart2.js"></script>
 <script>
 
 var map;
@@ -130,7 +130,6 @@ function initializeMap () {
 	    map: map
 	});
 	google.maps.event.addListener(marker0, 'dragend', function() {
-		alert('chart0');
 		drawChart("chart0",this.getPosition().lat(),this.getPosition().lng());
 	});
 
@@ -140,7 +139,6 @@ function initializeMap () {
 	    map: map
 	});
 	google.maps.event.addListener(marker1, 'dragend', function() {
-		alert('chart1');
 		drawChart("chart1",this.getPosition().lat(),this.getPosition().lng());
 	});
 	
@@ -153,9 +151,7 @@ function drawChart(chartId, latitude, longitude) {
 		data: "lat=" + latitude + "&lon=" + longitude
 	}).done(function(data) {
 		console.log(data);
-		alert ("about to update chart with chartId=" + chartId + " found " + $("#"+chartId).size());
-		alert ("#"+chartId + " id=" + $("#"+chartId).daylightchart("getId"));
-		$("#"+chartId).daylightchart("update", data);
+		$("#"+chartId).data("daylightchart").update(data);
 	});
 }
 
@@ -195,7 +191,7 @@ $(function(){
 				drawChart("chart0",lat,lon);
 			}
 		});
-		alert ("Chart0 ID: " + $("#chart0").daylightchart("getId"));
+		//alert ("Chart0");
 	});
 	
 	if (lat1 != -999) {
@@ -214,7 +210,7 @@ $(function(){
 				window.location.href= "?lat0=" + lat0 + "&lon0=" + lon0 +"&lat1=" + lat + "&lon1=" + lon;
 			}
 		});
-		alert ("Chart1 ID: " + $("#chart1").daylightchart("getId"));
+		//alert ("Chart1");
 	});
 	}
 	
