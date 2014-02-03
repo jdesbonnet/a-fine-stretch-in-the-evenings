@@ -12,25 +12,16 @@ public static final float pixelsPerHour = 24;
 public static final float pixelsPerDay = 2;
 public static final float topMargin = 16;
 
-double[] correctSunRiseSet(double riseSet[]) {
-	double[] ret = new double[2];
-	ret[Sun.RISE] = riseSet[Sun.RISE] == Sun.ABOVE_HORIZON  ? 0 : riseSet[Sun.RISE];
-	ret[Sun.SET] = riseSet[Sun.SET] == Sun.ABOVE_HORIZON 
-			| riseSet[Sun.SET]==Sun.BELOW_HORIZON 
-			//| riseSet[Sun.SET]>24 
-			//| riseSet[Sun.SET] < riseSet[Sun.RISE] 
-			? 24 : riseSet[Sun.SET];
-	return ret;
-}
-	
 %><%
+
+TimezoneDB.getInstance().setKey(timezoneDbKey);
 
 SimpleDateFormat df = new SimpleDateFormat ("dd MMM");
 
 double lat0 = 53.3;
 double lon0 = -9;
-double lat1 = -999;
-double lon1 = -999;
+double lat1 = 0.3;
+double lon1 = 32;
 
 if (request.getParameter("lat0") != null) {
 	try {
@@ -91,7 +82,7 @@ TABLE.dayNight TD.n {background: #00a; width:5px;}
 TABLE.dayNight TD.d {background: #ff0; width:5px;}
 TABLE.dayNight TD.ne {background: #008; width:5px;} 
 TABLE.dayNight TD.de {background: #fe0; width:5px;}
-INPUT.lat, INPUT.lon {width:4em;}
+INPUT.lat, INPUT.lon {width:6em;}
 INPUT.tz {width:15em;}
 .chart {width:660px; border:1px solid #888;border-radius:6px;padding:8px;}
 .map {background:yellow;width:100%;height:100%}
@@ -229,25 +220,10 @@ $(function(){
 
 <body>
 
-<!-- 
-<header>
-<svg width="1280" height="64" >
-<rect x="0" y="0" width="100%" height="100%" fill="yellow" />
-<text x="0" y="48" style="font-size:24pt;">A fine 
-<tspan lengthAdjust="spacingAndGlyphs" textLength="1000" >stretch</tspan> 
-in the evenings</text>
-</svg>
-</header>
--->
-
-
-<button id="mapBtn" type="button">Display Map</button>
-<div id="mapPopup" title="World Map"><div id="map"></div></div>
+<button id="mapBtn" type="button">Show World Map</button>
+<div id="mapPopup" title="World Map (drag markers to try alternative locations)"><div id="map"></div></div>
 
 <table>
-<!-- 
-<tr><td></td><td  colspan="1"><div id="map2"></div></td></tr>
--->
 <tr>
 <td><div class="chart" id="chart0"></div></td>
 <td><div class="chart" id="chart1"></div></td>

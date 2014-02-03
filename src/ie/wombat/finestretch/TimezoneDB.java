@@ -2,9 +2,12 @@ package ie.wombat.finestretch;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -18,6 +21,8 @@ import java.util.concurrent.ConcurrentMap;
 public class TimezoneDB {
 	
 	private static final TimezoneDB instance = new TimezoneDB();
+	
+	private static final DecimalFormat df = new DecimalFormat("0.0");
 	
 	private ConcurrentMap<String,String>tzCache = new ConcurrentHashMap<String,String>();
 	private int cacheLookups = 0;
@@ -38,7 +43,8 @@ public class TimezoneDB {
 		cacheLookups++;
 		
 		// Use string of latitude and longitude combined as key to cache HashMap
-		String key = latitude + "," + longitude;
+		String key = df.format(latitude) + "," + df.format(longitude);
+		System.err.println ("key=" + key);
 		
 		if (tzCache.containsKey(key)) {
 			System.err.println ("tzCacheHit on key=" + key + " value=" + tzCache.get(key));
@@ -46,19 +52,31 @@ public class TimezoneDB {
 			return tzCache.get(key);
 		}
 		
+		System.err.println ("cache miss");
+		
 		 StringBuffer buf = new StringBuffer();
 		 try {
+			 
+			 System.err.println ("apikey="+timezoneDbKey);
+			 
 			URL url = new URL("http://api.timezonedb.com/?lat=" + latitude 
 					+ "&lng=" + longitude + "&format=xml"
 					+ "&key=" + timezoneDbKey);
 			
-		 	BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			URLConnection con = url.openConnection();
+			con.setConnectTimeout(5000); // 5s
+			con.setReadTimeout(5000);
+			InputStream in = con.getInputStream();
+			
+		 	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		 	
 		    String line;
 		    while ((line = reader.readLine()) != null) {
 		        buf.append(line);
 		    }
 		    reader.close();
+		    
+		    System.err.println("response: " + buf.toString());
 		    
 		    int start = buf.indexOf("<zoneName>",0) + "<zoneName>".length();
 		    int end = buf.indexOf("</zoneName>",0);
@@ -73,7 +91,7 @@ public class TimezoneDB {
 		} catch (MalformedURLException e) {
 	    // ...
 		} catch (IOException e) {
-	    // ...
+			e.printStackTrace();
 		}
 		 
 		 return null;

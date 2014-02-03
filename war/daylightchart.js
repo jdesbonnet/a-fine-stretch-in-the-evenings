@@ -232,14 +232,17 @@
     			);
     		}	
     		
-    		$("#lat_" + wrapperEl.id).val(options.data.latitude);
-    		$("#lon_" + wrapperEl.id).val(options.data.longitude);	
+    		$("#lat_" + wrapperEl.id).val(formatNumber(options.data.latitude));
+    		$("#lon_" + wrapperEl.id).val(formatNumber(options.data.longitude));	
     		$("#tz_" + wrapperEl.id).html(options.data.timezone.id);
     	
     	};
     	
     	var formatTime = function (h) {
     		return (h|0) + "h"  + (((h*60)%60)|0) + "m";
+    	}
+    	var formatNumber = function (d) {
+    		return ((d*1000)|0)/1000;
     	}
 
 
