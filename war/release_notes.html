@@ -33,7 +33,7 @@ Known problems:
 
 <ul>
 
-<li> uses timezonedb.com web API to deduce local timezone form latitude,longitude. This may take a few seconds 
+<li> uses timezonedb.com web API to deduce local timezone from latitude,longitude. This may take a few seconds 
 and may on fail on occasion. I'm looking for a good alternative that doesn't involve an external web API.
 </li>
 
@@ -43,7 +43,11 @@ zones far from the 0 meridian.
 
 <li> Because of the two items above, rendering charts near the poles is problematic.</li>
 
-<li> Map allows markers to be dragged off-map which causes weird charts for non-existent latitudes.
+<li> Map allows markers to be dragged off-map which causes weird charts for non-existent latitudes.</li>
+
+<li> If downloading source, I deliberately left out _key.jsp which holds the timeszonedb.com API key. That file should contain the
+following: &lt;%! String timezoneDbKey="replace-with-key-here"; %&gt;
+</li>
 
 </ul>
 
