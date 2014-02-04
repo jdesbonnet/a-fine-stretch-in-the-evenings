@@ -235,6 +235,12 @@ A Fine Stretch In the Evenings, version 0.1, 29 Jan 2014. <a href="release_notes
 Got any queries? Email Joe at jdesbonnet@gmail.com 
 </p>
 </footer>
+
+<!-- 
+TZCache: 
+<%= TimezoneDB.getInstance().getCacheHits() %> / <%= TimezoneDB.getInstance().getCacheLookups() %>
+(<%= TimezoneDB.getInstance().getCacheHits()*100 / TimezoneDB.getInstance().getCacheLookups() %>%)
+ -->
 </body>
 
 </html>
