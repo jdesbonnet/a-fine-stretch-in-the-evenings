@@ -73,8 +73,8 @@ if (request.getParameter("tz1")!=null) {
 %><!DOCTYPE html>
 <html>
 <head>
-<title>Day/Night for latitude <%=lat0 %>, longitude <%=lon0 %></title>
-
+<title>Day/Night duration chart for latitude <%=lat0 %>, longitude <%=lon0 %></title>
+<meta name="description" content="A chart of the length of day/night for any point on the globe." />
 <style type="text/css">
 INPUT.lat, INPUT.lon {width:6em;}
 INPUT.tz {width:15em;}
