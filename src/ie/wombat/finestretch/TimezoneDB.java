@@ -44,20 +44,19 @@ public class TimezoneDB {
 		
 		// Use string of latitude and longitude combined as key to cache HashMap
 		String key = df.format(latitude) + "," + df.format(longitude);
-		System.err.println ("key=" + key);
 		
 		if (tzCache.containsKey(key)) {
-			System.err.println ("tzCacheHit on key=" + key + " value=" + tzCache.get(key));
+			//System.err.println ("tzCacheHit on key=" + key + " value=" + tzCache.get(key));
 			cacheHits++;
 			return tzCache.get(key);
 		}
 		
-		System.err.println ("cache miss");
+		System.err.println ("cache miss on key=" + key);
 		
 		 StringBuffer buf = new StringBuffer();
 		 try {
 			 
-			 System.err.println ("apikey="+timezoneDbKey);
+			//System.err.println ("apikey="+timezoneDbKey);
 			 
 			URL url = new URL("http://api.timezonedb.com/?lat=" + latitude 
 					+ "&lng=" + longitude + "&format=xml"
@@ -76,7 +75,7 @@ public class TimezoneDB {
 		    }
 		    reader.close();
 		    
-		    System.err.println("response: " + buf.toString());
+		    System.err.println("response from api.timezonedb.com: " + buf.toString());
 		    
 		    int start = buf.indexOf("<zoneName>",0) + "<zoneName>".length();
 		    int end = buf.indexOf("</zoneName>",0);
@@ -84,6 +83,7 @@ public class TimezoneDB {
 		    String zoneId = buf.substring(start,end);
 		    
 		    System.err.println ("TimezoneDB: zoneId=" + zoneId);
+		    
 		    tzCache.put(key, zoneId);
 		    
 		    return zoneId;
