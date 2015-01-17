@@ -90,6 +90,7 @@ INPUT.tz {width:15em;}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="finestretch.js"></script>
 <script src="daylightchart.js"></script>
 <script>
 
@@ -99,50 +100,6 @@ var lat0 = <%=lat0 %>;
 var lon0 = <%=lon0 %>;
 var lat1 = <%=lat1 %>;
 var lon1 = <%=lon1 %>;
-
-function initializeMap () {
-
-	var mapOptions = {
-	          center: new google.maps.LatLng(0,0),
-	          zoom: 1
-	        };
-	
-	map = new google.maps.Map(
-			document.getElementById("map"),
-            mapOptions);
-	
-	var marker0 = new google.maps.Marker({
-	    position: new google.maps.LatLng(lat0,lon0),
-	    draggable:true,
-	    map: map
-	});
-	google.maps.event.addListener(marker0, 'dragend', function() {
-		drawChart("chart0",this.getPosition().lat(),this.getPosition().lng());
-	});
-
-	var marker1 = new google.maps.Marker({
-	    position: new google.maps.LatLng(lat1,lon1),
-	    draggable:true,
-	    map: map
-	});
-	google.maps.event.addListener(marker1, 'dragend', function() {
-		drawChart("chart1",this.getPosition().lat(),this.getPosition().lng());
-	});
-	
-}
-
-
-function drawChart(chartId, latitude, longitude) {
-	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
-	$.ajax( {
-		url: "get-daylight-data.async.jsp",
-		data: "lat=" + latitude + "&lon=" + longitude
-	}).done(function(data) {
-		console.log(data);
-		$("#"+chartId).data("daylightchart").update(data);
-		$("#"+chartId).data("daylightchart").showLoadAnimation(false);
-	});
-}
 
 $(function(){
 	
