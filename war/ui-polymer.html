@@ -1,0 +1,38 @@
+<!DOCTYPE html> <html> <head>
+
+<!--
+using tutorial here:
+http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/
+-->
+
+<script src="./polymer_local/webcomponentsjs/webcomponents.min.js"></script>  
+<link rel="import" href="./polymer_local/components/core-scaffold/core-scaffold.html">
+<link rel="import" href="./polymer_local/components/core-item/core-item.html"> 
+<link rel="import" href="./polymer_loca/components/paper-input/paper-input.html"> 
+<link rel="import" href="./polymer_local/components/paper-fab/paper-fab.html"> 
+
+ </head>
+ 
+
+<body fullbleed unresolved> 
+
+<core-scaffold> 
+
+<!-- Drawer panel --> 
+<core-header-panel navigation flex> 
+<core-toolbar class="tall"> <!-- an avatar and username will be here --> </core-toolbar> 
+</core-header-panel> 
+
+<!-- App Title --> 
+<div tool layout horizontal flex> <span flex>A Fine Stretch in the Evenings</span> <core-icon icon="account-circle"></core-icon> 
+
+<span>4<!-- number of people online --></span> 
+</div> 
+
+<!-- Main content --> <div flex>...</div> 
+</core-scaffold>
+
+</body>
+
+</html>
+
