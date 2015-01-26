@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="App to show length of day throughout the year">
+	<meta name="author" content="Joe Desbonnet, jdesbonnet@gmail.com">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<title>A fine stretch in the evenings</title>
+
+	<link rel="icon" sizes="192x192" href="images/app-icon-192.png">
+	<link rel="icon" sizes="128x128" href="images/app-icon-128.png">
+	<link rel="apple-touch-icon" sizes="128x128" href="images/app-icon-128.png">
+	<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/app-icon-128.png">
+	
+	<!-- Polymer -->
+	<script src="polymer_local/components/webcomponentsjs/webcomponents.js"></script>
+
+	<link rel="import" href="polymer_local/components/core-scaffold/core-scaffold.html">
+	<link rel="import" href="polymer_local/components/paper-fab/paper-fab.html">
+	<link rel="import" href="polymer_local/components/paper-icon-button/paper-icon-button.html">
+	
+	<link rel="import" href="polymer_local/components/google-map/google-map.html">
+	<link rel="import" href="polymer_local/components/google-map/google-map-search.html">
+	<link rel="import" href="polymer_local/components/google-apis/google-maps-api.html">
+	
+	
+	<link rel="stylesheet" href="style.css">
+	
+	
+<style>
+body {
+  font-family: sans-serif;
+}
+core-header-panel {
+  background: white;
+}
+core-toolbar {
+  background-color: #03A9F4;
+}
+xpaper-fab {
+margin: 1em 5em;
+}
+#mainheader {
+	color:white;
+}
+</style>
+
+</head>
+
+<body unresolved fullbleed vertical layout class="lite">
+
+<template is="auto-binding">
+
+<core-header-panel flex>
+
+	<core-toolbar id="mainheader">
+      <paper-icon-button id="navicon" icon="arrow-back"></paper-icon-button>
+      <span flex>A fine stretch in the evenings</span>
+            <google-map-search map="{{map}}" query="Pizza"
+                     result="{{result}}"></google-map-search>
+      <paper-icon-button id="help_button" icon="help"></paper-icon-button>
+      <paper-icon-button id="search_button" icon="search"></paper-icon-button>
+    </core-toolbar>
+
+
+
+                     
+ 	<google-map map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" fit>
+		<google-map-marker latitude="53.28" longitude="-9.03"
+                     title="here" draggable="true"></google-map-marker>
+	</google-map>
+	
+	
+	<div horizontal layout style="margin-top:2em;margin-right:2em;height:100%">
+	<span flex></span>
+	<paper-fab icon="cloud" id="plot_btn" on-tap="{{plotChart}}"></paper-fab>
+	</div>
+
+
+	</core-header-panel>
+
+
+</template>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+
+<script>
+
+/*
+var gmap = document.querySelector('google-map');
+gmap.addEventListener('api-load', function(e) {
+  //document.querySelector('google-map-directions').map = this.map;
+  alert('api-load');
+});
+*/
+
+
+
+	(function() {
+    'use strict';
+    
+    var template = document.querySelector('template[is=auto-binding]');
+    
+    template.plotChart = function(e) {
+    	
+    	var gmapEl = document.querySelector('google-map-marker');
+    	console.log(gmapEl.addEventListener);
+    	
+    	var markerEl = document.querySelector('google-map-marker');
+    	console.log (markerEl.marker);
+
+    	// How TF do I trap dragend event????!!
+    	gmapEl.addEventListener(markerEl,'dragend', function(){
+    		alert('j');
+    	});
+    	
+    	var latitude = markerEl.latitude;
+    	var longitude = markerEl.longitude;
+    	
+    	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
+    	$.ajax( {
+    		url: "get-daylight-data.async.jsp",
+    		data: "lat=" + latitude + "&lon=" + longitude
+    	}).done(function(data) {
+    		console.log(data);
+    		$("#"+chartId).data("daylightchart").update(data);
+    		$("#"+chartId).data("daylightchart").showLoadAnimation(false);
+    	});
+    	
+    	
+    };
+
+
+})();
+</script>
+</body>
+</html>
