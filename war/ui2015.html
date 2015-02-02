@@ -90,46 +90,42 @@ background-color:white;
 
 	
 	
-	<div horizontal layout style="margin-top:2em;margin-right:2em;height:100%">
-	<span flex></span>
-	<paper-fab icon="cloud" id="plot_btn" on-tap="{{plotChart}}"></paper-fab>
-	</div>
+<div horizontal layout style="margin-top:2em;margin-right:2em;height:100%">
+<span flex></span>
+<paper-fab icon="cloud" id="plot_btn" on-tap="{{plotChart}}"></paper-fab>
+</div>
 
-
-	</core-header-panel>
-
+</core-header-panel>
 
 </template>
 
+<!-- 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
+-->
 
 <script>
-$(function(){
 
-(function() {
     'use strict';
     
     var template = document.querySelector('template[is=auto-binding]');
     
-    template.plotChart = function(e) {
-       
+    function initMarker () {
      	var gmapEl = document.querySelector("google-map");
-        console.log(gmapEl);
-        console.log(gmapEl.map);
-        console.log ("marker=");
         var markerEl = document.querySelector("google-map-marker");
-        console.log(markerEl.marker);
-        console.log(markerEl.marker.addListener);
         markerEl.marker.addListener('click',function(){console.log('CLICK');});
-        markerEl.marker.addListener('dragend',function(){console.log('DRAGEND');});
-
+        markerEl.marker.addListener('dragend',function(e){
+        	console.log(e.latLng.lat() + " " + e.latLng.lng());
+        });
         gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
-
-
-    	var latitude = markerEl.latitude;
-    	var longitude = markerEl.longitude;
-    	
+        console.log("marker initialized");
+    }
+    
+    // This is ridiculous!! But I can't find any event at which I know it's save
+    // to call this (if called to early gmapEl is null)
+    setTimeout (initMarker, 1000);
+    
+    template.plotChart = function(e) {
+      
     	/*
     	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
     	$.ajax( {
@@ -142,19 +138,7 @@ $(function(){
     	});
         */
     };
-    
-
-    
-	google.maps.event.addListener(markerEl.marker,'drag',function(event) {
-    	//document.getElementById('f_latitude').value = event.latLng.lat();
-        //document.getElementById('f_longitude').value = event.latLng.lng();
-        console.log(event);
-	});
-   
-
-})();
-
-});
+          
 
 </script>
 </body>
