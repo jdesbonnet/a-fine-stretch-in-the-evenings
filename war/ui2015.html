@@ -79,11 +79,11 @@ google-map{width:50%;height:400px;}
 
 <div horizontal layout style="height:100%">
 
-<google-map map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" xfit>
+<google-map map="{{map}}" latitude="53.3" longitude="-9" zoom="4" minZoom="2" maxZoom="10" xfit>
 	<google-map-marker latitude="53.28" longitude="-9.03" title="here" draggable="true"></google-map-marker>
 </google-map>
 
-<div id="daylightChart" style="width:50%;height:auto;background-color:yellow">&nbsp;</div>
+<div id="daylightChart" style="width:50%;height:auto;">&nbsp;</div>
 </div>
 
 	
@@ -98,16 +98,15 @@ google-map{width:50%;height:400px;}
 
 </template>
 
-<!-- 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
--->
-
+<script src="daylightchart.js"></script>
 <script>
 
     'use strict';
     
     var template = document.querySelector('template[is=auto-binding]');
     
+
     function initMarker () {
      	var gmapEl = document.querySelector("google-map");
         var markerEl = document.querySelector("google-map-marker");
@@ -116,9 +115,14 @@ google-map{width:50%;height:400px;}
         	var latitude = e.latLng.lat();
         	var longitude = e.latLng.lng();
         	template.latitude=latitude + "," + longitude;
+        	alert('update chart');
+            updateDaylightChart (latitude,longitude);
         });
         gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
         console.log("marker initialized");
+        
+        updateDaylightChart (markerEl.latitude,markerEl.longitude);
+        
     }
     
     // This is ridiculous!! But I can't find any event at which I know it's save
@@ -126,21 +130,26 @@ google-map{width:50%;height:400px;}
     setTimeout (initMarker, 1000);
     
     template.plotChart = function(e) {
-      
-    	/*
-    	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
+    };
+          
+    
+    function updateDaylightChart (latitude,longitude) {
     	$.ajax( {
     		url: "get-daylight-data.async.jsp",
     		data: "lat=" + latitude + "&lon=" + longitude
     	}).done(function(data) {
-    		console.log(data);
-    		$("#"+chartId).data("daylightchart").update(data);
-    		$("#"+chartId).data("daylightchart").showLoadAnimation(false);
+    		$("#daylightChart").daylightchart({
+    			width:800,
+    			pixelsPerHour: 22,
+    			pixelsPerDay: 1,
+    			leftMargin: 42,
+    			topMargin: 10,
+    			data: data
+    		});
     	});
-        */
-    };
-          
-
+    	
+    }
+    
 </script>
 </body>
 </html>

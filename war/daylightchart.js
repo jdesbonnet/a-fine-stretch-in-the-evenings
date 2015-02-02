@@ -25,6 +25,7 @@
             var wrapperEl = element;            
     		var id = wrapperEl.id;
     		
+    		/*
     		var formEl = document.createElement("form");
     		$(wrapperEl).append(formEl);
     		$(formEl).html('<table><tr>\
@@ -34,6 +35,7 @@
     				<td>Timezone:</td><td><span class="tz" id="tz_'+id+'"></span></td>\
     				</tr></table>\
     				');
+    		*/
     		
     		// Outer DIV element needed for refresh issue
     		svgDivEl = document.createElement("div");
@@ -152,7 +154,7 @@
     			var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     			textEl.setAttribute("x",hx);
     			textEl.setAttribute("y",options.topMargin-2);
-    			textEl.setAttribute("style","font-size:8pt");
+    			textEl.setAttribute("style","font-size:7pt");
     			$(textEl).append(""+h+"h");
     			$(svgEl).append(textEl);
     		
@@ -161,20 +163,20 @@
     		var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     		textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 2);
     		textEl.setAttribute("y",options.topMargin-12);
-    		textEl.setAttribute("style","font-size:8pt");
+    		textEl.setAttribute("style","font-size:7pt");
     		$(textEl).append ("day len");
     		$(svgEl).append(textEl);
     		
     		var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     		textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 50);
     		textEl.setAttribute("y",options.topMargin-12);
-    		textEl.setAttribute("style","font-size:8pt");
+    		textEl.setAttribute("style","font-size:7pt");
     		$(textEl).append ("Δ");
     		$(svgEl).append(textEl);
     		var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     		textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 42);
     		textEl.setAttribute("y",options.topMargin);
-    		textEl.setAttribute("style","font-size:8pt");
+    		textEl.setAttribute("style","font-size:7pt");
     		$(textEl).append ("m/day");
     		$(svgEl).append(textEl);
     		
@@ -190,19 +192,21 @@
     			lineEl.setAttribute("stroke-opacity","0.5");
     			$(svgEl).append(lineEl);
 
+    			// Date of week
     			var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    			textEl.setAttribute("x",0);
+    			textEl.setAttribute("x",8);
     			textEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay+4);
-    			textEl.setAttribute("style","font-size:8pt");
-    			$(textEl).append(""+options.data.riseSet[i][4]);
+    			textEl.setAttribute("style","font-size:7pt");
+    			$(textEl).append(" "+options.data.riseSet[i][4]);
     			$(svgEl).append(textEl);
     			
     			dayLength =options.data.riseSet[i][2]-options.data.riseSet[i][1];
     			
+    			// Length of day
     			var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     			textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 2);
     			textEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay+4);
-    			textEl.setAttribute("style","font-size:8pt");
+    			textEl.setAttribute("style","font-size:7pt");
     			$(textEl).append(formatTime(dayLength));
 
     			$(svgEl).append(textEl);
@@ -211,7 +215,7 @@
     				var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     				textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 70);
     				textEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay+4);
-    				textEl.setAttribute("style","font-size:8pt;");
+    				textEl.setAttribute("style","font-size:7pt;");
     				textEl.setAttribute("text-anchor","end");
 
     				$(textEl).append(""+parseFloat(60*(dayLength-prevDayLength)/7).toFixed(2));
