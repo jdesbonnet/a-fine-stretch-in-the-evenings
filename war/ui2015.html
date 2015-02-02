@@ -114,26 +114,20 @@ google-map{width:50%;height:400px;}
         markerEl.marker.addListener('dragend',function(e){
         	var latitude = e.latLng.lat();
         	var longitude = e.latLng.lng();
-        	template.latitude=latitude + "," + longitude;
-        	alert('update chart');
             updateDaylightChart (latitude,longitude);
         });
         gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
         console.log("marker initialized");
         
-        updateDaylightChart (markerEl.latitude,markerEl.longitude);
+        createDaylightChart (markerEl.latitude,markerEl.longitude);
         
     }
     
     // This is ridiculous!! But I can't find any event at which I know it's save
     // to call this (if called to early gmapEl is null)
     setTimeout (initMarker, 1000);
-    
-    template.plotChart = function(e) {
-    };
-          
-    
-    function updateDaylightChart (latitude,longitude) {
+       
+    function createDaylightChart (latitude,longitude) {
     	$.ajax( {
     		url: "get-daylight-data.async.jsp",
     		data: "lat=" + latitude + "&lon=" + longitude
@@ -147,7 +141,15 @@ google-map{width:50%;height:400px;}
     			data: data
     		});
     	});
-    	
+    }
+    
+    function updateDaylightChart (latitude,longitude) {
+    	$.ajax( {
+    		url: "get-daylight-data.async.jsp",
+    		data: "lat=" + latitude + "&lon=" + longitude
+    	}).done(function(data) {
+    		$("#daylightChart").data("daylightchart").update(data);
+    	});
     }
     
 </script>

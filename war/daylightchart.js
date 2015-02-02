@@ -25,18 +25,6 @@
             var wrapperEl = element;            
     		var id = wrapperEl.id;
     		
-    		/*
-    		var formEl = document.createElement("form");
-    		$(wrapperEl).append(formEl);
-    		$(formEl).html('<table><tr>\
-    				<td><div class="ldanim"><img id="ldanim_' + id + '" src="ajax-loader.gif" width="16"/></div></td>\
-    				<td>Latitude:</td><td><input type="text" class="lat" id="lat_'+id+'" value=""/></td>\
-    				<td>Longitude:</td><td><input type="text" class="lon" id="lon_'+id+'" value=""/></td>\
-    				<td>Timezone:</td><td><span class="tz" id="tz_'+id+'"></span></td>\
-    				</tr></table>\
-    				');
-    		*/
-    		
     		// Outer DIV element needed for refresh issue
     		svgDivEl = document.createElement("div");
     		svgDivEl.id = "svgDiv_" + wrapperEl.id;
