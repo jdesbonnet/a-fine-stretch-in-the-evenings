@@ -22,6 +22,10 @@
 	<link rel="import" href="polymer_local/components/paper-fab/paper-fab.html">
 	<link rel="import" href="polymer_local/components/paper-icon-button/paper-icon-button.html">
 	
+	<link rel="import" href="polymer_local/components/core-pages/core-pages.html">
+	<link rel="import" href="polymer_local/components/paper-tabs/paper-tab.html">
+	<link rel="import" href="polymer_local/components/paper-tabs/paper-tabs.html">
+	
 	<link rel="import" href="polymer_local/components/google-map/google-map.html">
 	<link rel="import" href="polymer_local/components/google-map/google-map-search.html">
 	<link rel="import" href="polymer_local/components/google-apis/google-maps-api.html">
@@ -42,6 +46,9 @@ core-toolbar {
 }
 xpaper-fab {
 margin: 1em 5em;
+}
+paper-tab {
+background-color:white;
 }
 #mainheader {
 	color:white;
@@ -65,13 +72,22 @@ margin: 1em 5em;
       <paper-icon-button id="search_button" icon="search"></paper-icon-button>
     </core-toolbar>
 
+	
+<google-map id="mymap" map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" fit>
+	<google-map-marker latitude="53.28" longitude="-9.03" title="here" draggable="true"></google-map-marker>
+</google-map>
 
+<paper-tabs selected="{{selected}}">
+  <paper-tab>Map</paper-tab>
+  <paper-tab>Chart</paper-tab>
+  <paper-tab>Tab 3</paper-tab>
+</paper-tabs>
+<core-pages selected="{{selected}}">
+  <div>  map page </div>  
+  <div>Page 2</div>
+  <div>Page 3</div>
+</core-pages>
 
-                     
- 	<google-map map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" fit>
-		<google-map-marker latitude="53.28" longitude="-9.03"
-                     title="here" draggable="true"></google-map-marker>
-	</google-map>
 	
 	
 	<div horizontal layout style="margin-top:2em;margin-right:2em;height:100%">
@@ -89,38 +105,32 @@ margin: 1em 5em;
 
 
 <script>
+$(function(){
 
-/*
-var gmap = document.querySelector('google-map');
-gmap.addEventListener('api-load', function(e) {
-  //document.querySelector('google-map-directions').map = this.map;
-  alert('api-load');
-});
-*/
-
-
-
-	(function() {
+(function() {
     'use strict';
     
     var template = document.querySelector('template[is=auto-binding]');
     
     template.plotChart = function(e) {
-    	
-    	var gmapEl = document.querySelector('google-map-marker');
-    	console.log(gmapEl.addEventListener);
-    	
-    	var markerEl = document.querySelector('google-map-marker');
-    	console.log (markerEl.marker);
+       
+     	var gmapEl = document.querySelector("google-map");
+        console.log(gmapEl);
+        console.log(gmapEl.map);
+        console.log ("marker=");
+        var markerEl = document.querySelector("google-map-marker");
+        console.log(markerEl.marker);
+        console.log(markerEl.marker.addListener);
+        markerEl.marker.addListener('click',function(){console.log('CLICK');});
+        markerEl.marker.addListener('dragend',function(){console.log('DRAGEND');});
 
-    	// How TF do I trap dragend event????!!
-    	gmapEl.addEventListener(markerEl,'dragend', function(){
-    		alert('j');
-    	});
-    	
+        gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
+
+
     	var latitude = markerEl.latitude;
     	var longitude = markerEl.longitude;
     	
+    	/*
     	$("#"+chartId).data("daylightchart").showLoadAnimation(true);
     	$.ajax( {
     		url: "get-daylight-data.async.jsp",
@@ -130,12 +140,22 @@ gmap.addEventListener('api-load', function(e) {
     		$("#"+chartId).data("daylightchart").update(data);
     		$("#"+chartId).data("daylightchart").showLoadAnimation(false);
     	});
-    	
-    	
+        */
     };
+    
 
+    
+	google.maps.event.addListener(markerEl.marker,'drag',function(event) {
+    	//document.getElementById('f_latitude').value = event.latLng.lat();
+        //document.getElementById('f_longitude').value = event.latLng.lng();
+        console.log(event);
+	});
+   
 
 })();
+
+});
+
 </script>
 </body>
 </html>
