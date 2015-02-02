@@ -105,7 +105,8 @@
     			if (rec[3]<rec[0]) {
     				rec[3]=24;
     			}
-    			// Twilight
+    			
+    			// Twilight (spans all day, but yellow day rect goes on top)
     			var twilightRectEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     			twilightRectEl.setAttribute("x",options.leftMargin + rec[0]*options.pixelsPerHour);
     			twilightRectEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay);
@@ -115,19 +116,20 @@
     			$(svgEl).append(twilightRectEl);
 
 
-    			
+    			// Day rectange goes over the twlight rect
     			var dayRectEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     			dayRectEl.setAttribute("x",options.leftMargin + rec[1]*options.pixelsPerHour);
     			dayRectEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay);
     			dayRectEl.setAttribute("width", (rec[2] - rec[1])*options.pixelsPerHour);
     			dayRectEl.setAttribute("height", options.pixelsPerDay);
     			dayRectEl.setAttribute("fill", "url(#day)");
+    			dayRectEl.setAttribute("stroke","none");
     			//dayRectEl.setAttribute("fill", "yellow");
 
     			$(svgEl).append(dayRectEl);
     		}
     		
-    		// Horizontal grid
+    		// Horizontal grid (hours of day)
     		for (var h = 0; h < 24; h++) {
     			var hx = h * options.pixelsPerHour + options.leftMargin + 0.5;
     			var lineEl = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -148,6 +150,7 @@
     		
     		}
     		
+    		// Label for day length
     		var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     		textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 2);
     		textEl.setAttribute("y",options.topMargin-12);
@@ -155,6 +158,7 @@
     		$(textEl).append ("day len");
     		$(svgEl).append(textEl);
     		
+    		// Label for delta (change in day length)
     		var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     		textEl.setAttribute("x",options.leftMargin + 24*options.pixelsPerHour + 50);
     		textEl.setAttribute("y",options.topMargin-12);
@@ -168,9 +172,10 @@
     		$(textEl).append ("m/day");
     		$(svgEl).append(textEl);
     		
-    		// Vertical grid
+    		// Vertical grid (grid line for each week)
     		var dayLength,prevDayLength=0;
     		for (var i = 0; i < 365; i+=7) {
+    			
     			var lineEl = document.createElementNS("http://www.w3.org/2000/svg", "line");
     			lineEl.setAttribute("x1",options.leftMargin);
     			lineEl.setAttribute("y1",options.topMargin + i*options.pixelsPerDay);
@@ -178,9 +183,10 @@
     			lineEl.setAttribute("y2",options.topMargin + i*options.pixelsPerDay);
     			lineEl.setAttribute("stroke","#888");
     			lineEl.setAttribute("stroke-opacity","0.5");
+    			lineEl.setAttribute("shape-rendering","crispEdges");
     			$(svgEl).append(lineEl);
 
-    			// Date of week
+    			// Date of week label
     			var textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     			textEl.setAttribute("x",8);
     			textEl.setAttribute("y",options.topMargin + i*options.pixelsPerDay+4);
