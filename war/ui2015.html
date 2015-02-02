@@ -23,6 +23,7 @@
 	<link rel="import" href="./bower_components/paper-icon-button/paper-icon-button.html">
 	<link rel="import" href="./bower_components/core-header-panel/core-header-panel.html">
 	<link rel="import" href="./bower_components/google-map/google-map.html">
+	<link rel="import" href="./bower_components/google-map/google-map-search.html">
 	
 	<link rel="stylesheet" href="style.css">
 	
@@ -40,6 +41,9 @@ core-toolbar {
 #mainheader {
 	color:white;
 }
+.finestretch-heading {font-style:italic;}
+google-map{width:50%;height:560px;}
+
 </style>
 
 </head>
@@ -51,25 +55,32 @@ core-toolbar {
 <core-header-panel flex>
 
 <core-toolbar id="mainheader">
-      <paper-icon-button id="navicon" icon="arrow-back"></paper-icon-button>
-      <span flex>A fine stretch in the evenings</span>
-            <google-map-search map="{{map}}" query="Pizza"
+<!-- 
+	<paper-icon-button id="navicon" icon="arrow-back"></paper-icon-button>
+-->
+	<span class="finestretch-heading" flex>“A fine stretch in the evenings”</span>
+	<label>Search for city:</label>
+	<input type="text" id="map_query" value="{{mapQuery}}" />
+	<google-map-search map="{{map}}" query="{{mapQuery}}"
                      result="{{result}}"></google-map-search>
+      
+      Latitude: <input type="text" size="8" value="{{result.latitude}}" readonly/>
+      Longitude: <input type="text" size="8" value="{{result.longitude}}" readonly/>
       <paper-icon-button id="help_button" icon="help"></paper-icon-button>
       <paper-icon-button id="search_button" icon="search"></paper-icon-button>
-    </core-toolbar>
-
-
-<style>
-google-map{width:50%;height:560px;}
-</style>
+</core-toolbar>
 
 <div horizontal layout style="height:100%">
-
-<google-map map="{{map}}" latitude="53.3" longitude="-9" zoom="4" minZoom="2" maxZoom="10" xfit>
-	<google-map-marker latitude="53.28" longitude="-9.03" title="here" draggable="true"></google-map-marker>
+<!-- left col: map -->
+<google-map map="{{map}}" latitude="53.3" longitude="-9" zoom="2" minZoom="2" maxZoom="10" xfit>
+	<google-map-marker 
+	xlatitude="53.28" 
+	xlongitude="-9.03"
+	latitude="{{result.latitude}}"
+	longitude="{{result.longitude}}" 
+	draggable="true"></google-map-marker>
 </google-map>
-
+<!-- right col: daylight chart -->
 <div id="daylightChart" style="width:50%;height:auto;"></div>
 </div>
 
@@ -84,7 +95,7 @@ google-map{width:50%;height:560px;}
     'use strict';
     
     var template = document.querySelector('template[is=auto-binding]');
-    
+    template.mapQuery = "Galway, Ireland";
 
     function initMarker () {
      	var gmapEl = document.querySelector("google-map");
@@ -93,6 +104,7 @@ google-map{width:50%;height:560px;}
         markerEl.marker.addListener('dragend',function(e){
         	var latitude = e.latLng.lat();
         	var longitude = e.latLng.lng();
+        	$("#map_query").val("");
             updateDaylightChart (latitude,longitude);
         });
         gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
