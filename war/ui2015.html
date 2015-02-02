@@ -72,28 +72,27 @@ background-color:white;
       <paper-icon-button id="search_button" icon="search"></paper-icon-button>
     </core-toolbar>
 
-	
-<google-map id="mymap" map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" fit>
+
+<style>
+google-map{width:50%;height:400px;}
+</style>
+
+<div horizontal layout style="height:100%">
+
+<google-map map="{{map}}" latitude="53.3" longitude="-9" minZoom="9" maxZoom="11" xfit>
 	<google-map-marker latitude="53.28" longitude="-9.03" title="here" draggable="true"></google-map-marker>
 </google-map>
 
-<paper-tabs selected="{{selected}}">
-  <paper-tab>Map</paper-tab>
-  <paper-tab>Chart</paper-tab>
-  <paper-tab>Tab 3</paper-tab>
-</paper-tabs>
-<core-pages selected="{{selected}}">
-  <div>  map page </div>  
-  <div>Page 2</div>
-  <div>Page 3</div>
-</core-pages>
+<div id="daylightChart" style="width:50%;height:auto;background-color:yellow">&nbsp;</div>
+</div>
 
 	
-	
+<!--
 <div horizontal layout style="margin-top:2em;margin-right:2em;height:100%">
 <span flex></span>
 <paper-fab icon="cloud" id="plot_btn" on-tap="{{plotChart}}"></paper-fab>
 </div>
+-->
 
 </core-header-panel>
 
@@ -114,7 +113,9 @@ background-color:white;
         var markerEl = document.querySelector("google-map-marker");
         markerEl.marker.addListener('click',function(){console.log('CLICK');});
         markerEl.marker.addListener('dragend',function(e){
-        	console.log(e.latLng.lat() + " " + e.latLng.lng());
+        	var latitude = e.latLng.lat();
+        	var longitude = e.latLng.lng();
+        	template.latitude=latitude + "," + longitude;
         });
         gmapEl.map.addListener(markerEl.marker,'drag',function(){console.log('DRAG');});
         console.log("marker initialized");
