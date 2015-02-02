@@ -17,6 +17,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 -->
 
 	<welcome-file-list>
-		<welcome-file>chart.jsp</welcome-file>
+		<welcome-file>ui2015.html</welcome-file>
 	</welcome-file-list>
 </web-app>
