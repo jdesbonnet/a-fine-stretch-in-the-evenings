@@ -21,11 +21,11 @@
 	<link rel="import" href="./bower_components/core-toolbar/core-toolbar.html">
 	
 	<link rel="import" href="./bower_components/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="./bower_components/paper-toast/paper-toast.html">
+	
 	<link rel="import" href="./bower_components/core-header-panel/core-header-panel.html">
 	<link rel="import" href="./bower_components/google-map/google-map.html">
 	<link rel="import" href="./bower_components/google-map/google-map-search.html">
-	
-	<link rel="stylesheet" href="style.css">
 	
 	
 <style>
@@ -59,15 +59,20 @@ google-map{width:50%;height:560px;}
 	<paper-icon-button id="navicon" icon="arrow-back"></paper-icon-button>
 -->
 	<span class="finestretch-heading" flex>“A fine stretch in the evenings”</span>
+	
+<!--  
 	<label>Search for city:</label>
 	<input type="text" id="map_query" value="{{mapQuery}}" />
+-->
 	<google-map-search map="{{map}}" query="{{mapQuery}}"
                      result="{{result}}"></google-map-search>
       
-      Latitude: <input type="text" size="8" value="{{result.latitude}}" readonly/>
-      Longitude: <input type="text" size="8" value="{{result.longitude}}" readonly/>
+      Latitude: <input type="text" size="16" value="{{result.latitude}}" readonly/>
+      Longitude: <input type="text" size="16" value="{{result.longitude}}" readonly/>
+      <!-- 
       <paper-icon-button id="help_button" icon="help"></paper-icon-button>
       <paper-icon-button id="search_button" icon="search"></paper-icon-button>
+      -->
 </core-toolbar>
 
 <div horizontal layout style="height:100%">
@@ -78,15 +83,25 @@ google-map{width:50%;height:560px;}
 	xlongitude="-9.03"
 	latitude="{{result.latitude}}"
 	longitude="{{result.longitude}}" 
+	title="Drag marker with mouse or finger"
 	draggable="true"></google-map-marker>
+	
+	
+	
+	
 </google-map>
 <!-- right col: daylight chart -->
 <div id="daylightChart" style="width:50%;height:auto;"></div>
 </div>
 
+
+
 </core-header-panel>
 
 </template>
+
+	<paper-toast text="Your draft has been discarded." ></paper-toast>
+
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="daylightchart.js"></script>
