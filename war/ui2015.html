@@ -85,10 +85,6 @@ google-map{width:50%;height:560px;}
 	longitude="{{result.longitude}}" 
 	title="Drag marker with mouse or finger"
 	draggable="true"></google-map-marker>
-	
-	
-	
-	
 </google-map>
 <!-- right col: daylight chart -->
 <div id="daylightChart" style="width:50%;height:auto;"></div>
@@ -100,7 +96,7 @@ google-map{width:50%;height:560px;}
 
 </template>
 
-	<paper-toast text="Your draft has been discarded." ></paper-toast>
+<paper-toast text="Testing toast." ></paper-toast>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -131,7 +127,7 @@ google-map{width:50%;height:560px;}
     
     // This is ridiculous!! But I can't find any event at which I know it's save
     // to call this (if called to early gmapEl is null)
-    setTimeout (initMarker, 1000);
+    setTimeout (initMarker, 3000);
        
     function createDaylightChart (latitude,longitude) {
     	$.ajax( {
